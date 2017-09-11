@@ -68,12 +68,15 @@ for ( j in 1:(trans+T) ){
   m1[x[i,1],x[i,2]] <- m[x[i,1],x[i,2]]/gamma + 1 #increase activation at h_ij
   
   if( m1[x[i,1],x[i,2]] > thres[j]){ #check threshold
-    #select the neighbouring position with the lowest activation
+    #select and go to the global minimum
+    
+    
+   } 
+   else{ #go to local minimum
     ri <- sample(4)
     idx <- matrix(x[i,],  nrow=4, ncol=2, byrow = TRUE)+ vec[ri,]
     m2 <- m1 + pot
     vi <- which(m2[idx] == min(m2[idx]))
-    #go to the minimum
     x[i+1,] <-  c(x[i,1] + vec[ri[vi],1], x[i,2] + vec[ri[vi],2] )
   }
   m <- m1
