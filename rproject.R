@@ -75,8 +75,8 @@ for ( j in 1:(trans+T) ){
     vi <- which(m2[idx] == min(m2[idx]))
     #go to the minimum
     x[i+1,] <-  c(x[i,1] + vec[ri[vi],1], x[i,2] + vec[ri[vi],2] )
-    m <- m1
   }
+  m <- m1
 }
 
 # jitter trajectory (for better visualization)
