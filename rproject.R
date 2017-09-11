@@ -66,7 +66,7 @@ for ( j in 1:(trans+T) ){
    
   m1 <- gamma*m #relaxation
   m1[x[i,1],x[i,2]] <- m[x[i,1],x[i,2]]/gamma + 1 #increase activation at h_ij
-  
+  m2 <- m1 + pot
   if( m1[x[i,1],x[i,2]] > thres[j]){ #check threshold
     #select and go to the global minimum
     vi <- which(m2 == min(m2), arr.ind = TRUE) #returns vector with row & column indices of global minimum
@@ -76,7 +76,6 @@ for ( j in 1:(trans+T) ){
   else{ #go to local minimum
     ri <- sample(4)
     idx <- matrix(x[i,],  nrow=4, ncol=2, byrow = TRUE)+ vec[ri,]
-    m2 <- m1 + pot
     vi <- which(m2[idx] == min(m2[idx]))
     x[i+1,] <-  c(x[i,1] + vec[ri[vi],1], x[i,2] + vec[ri[vi],2] )
   }
