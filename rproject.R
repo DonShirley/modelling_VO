@@ -69,10 +69,11 @@ for ( j in 1:(trans+T) ){
   
   if( m1[x[i,1],x[i,2]] > thres[j]){ #check threshold
     #select and go to the global minimum
+    vi <- which(m2 == min(m2), arr.ind = TRUE) #returns vector with row & column indices of global minimum
     
     
-   } 
-   else{ #go to local minimum
+  } 
+  else{ #go to local minimum
     ri <- sample(4)
     idx <- matrix(x[i,],  nrow=4, ncol=2, byrow = TRUE)+ vec[ri,]
     m2 <- m1 + pot
