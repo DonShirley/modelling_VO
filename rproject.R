@@ -70,7 +70,7 @@ for ( j in 1:(trans+T) ){
   if( m1[x[i,1],x[i,2]] > thres[j]){ #check threshold
     #select and go to the global minimum
     vi <- which(m2 == min(m2), arr.ind = TRUE) #returns vector with row & column indices of global minimum
-    
+    x[i+1,] <-vi #save position
     
   } 
   else{ #go to local minimum
