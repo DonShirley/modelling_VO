@@ -61,12 +61,12 @@ for ( j in 1:(trans+T) ){
     x[1,] <- vi
     i <- 0
   }
-  pot <- pot * a[j] #apply time-varying factor a=b to potential
+  pot1 <- pot * a[j] #apply time-varying factor a=b to potential
   i <- i+1
    
   m1 <- gamma*m #relaxation
   m1[x[i,1],x[i,2]] <- m[x[i,1],x[i,2]]/gamma + 1 #increase activation at h_ij
-  m2 <- m1 + pot
+  m2 <- m1 + pot1
   if( m1[x[i,1],x[i,2]] > thres[j]){ #check threshold
     #select and go to the global minimum
     vi <- which(m2 == min(m2), arr.ind = TRUE) #returns vector with row & column indices of global minimum
