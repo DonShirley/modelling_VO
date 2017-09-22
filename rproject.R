@@ -1,13 +1,14 @@
-setwd("~/Documents/papers/MathModBook/Exercises-Chap2/R/SAWmodel")
-rm(list=ls())
+#setwd("~/Documents/papers/MathModBook/Exercises-Chap2/R/SAWmodel")
+setwd("~/Google\ Drive/Studium/Math_VO/Abschlussaufgabe/modelling_VO/")
+rm(list=ls(all=TRUE))
 
 library(ggplot2)
 library(grid)
 library (stats)
 
-T = 30
+T = 2
 L <- 51
-trans <- 0
+trans <- 5000
 gamma <- 0.999
 slope <- 1.0*L
 
@@ -32,7 +33,7 @@ f <- 1/(1 + lambda1 * exp( - p_1 * (t - 2 * tau_p)^2))
 
 D <- lambda2 * ( (p_2^K) / factorial(K) ) * (t - (tau_p + tau_A))^K * exp(- p_2 * (t - (tau_p + tau_A)))
 
-a_A <- 1/(1 + D)
+a_A <- 1/(D + 1)
 
 thres = 1/(1 + beta * ((1 - f + (  1 - a_A))))
 
@@ -61,24 +62,32 @@ for ( j in 1:(trans+T) ){
     x[1,] <- vi
     i <- 0
   }
+  debug_var <- m1[x[i+1,1],x[i+1,2]] #XXX delete
+  
   pot1 <- pot * a[j] #apply time-varying factor a=b to potential
   i <- i+1
    
+  mx_temp <- m1[x[i,1],x[i,2]] #save value where no no relexation is applied
   m1 <- gamma*m #relaxation
-  m1[x[i,1],x[i,2]] <- m[x[i,1],x[i,2]]/gamma + 1 #increase activation at h_ij
+  
+  m1[x[i,1],x[i,2]] <- mx_temp + 1 #increase activation at h_ij
   m2 <- m1 + pot1
-  if( m1[x[i,1],x[i,2]] > thres[j]){ #check threshold
+  
+  ri <- sample(4)
+  idx <- matrix(x[i,],  nrow=4, ncol=2, byrow = TRUE)+ vec[ri,]
+  vi <- which(m2[idx] == min(m2[idx]))
+    
+  next_x <-  c(x[i,1] + vec[ri[vi],1], x[i,2] + vec[ri[vi],2] ) #get next possible step
+  if(m1[next_x[1],next_x[2]] > thres[j]){ #check threshold nor next_x
     #select and go to the global minimum
     vi <- which(m2 == min(m2), arr.ind = TRUE) #returns vector with row & column indices of global minimum
     x[i+1,] <-vi #save position
-    
-  } 
-  else{ #go to local minimum
-    ri <- sample(4)
-    idx <- matrix(x[i,],  nrow=4, ncol=2, byrow = TRUE)+ vec[ri,]
-    vi <- which(m2[idx] == min(m2[idx]))
+  }  
+  else
+  { 
     x[i+1,] <-  c(x[i,1] + vec[ri[vi],1], x[i,2] + vec[ri[vi],2] )
   }
+  
   m <- m1
 }
 
