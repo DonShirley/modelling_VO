@@ -10,16 +10,16 @@ sacRate <- dget("sacRate.R")
 
 T = 600
 L <- 51
-trans <- 5000
-gamma <- 0.955
-slope <- 0.9*L
+trans <- 10000
+gamma <- 0.954
+slope <- 1*L
 
 #saccades
 sac <- matrix(, nrow = 0, ncol = 3)
 trial <- 1
 subj <- 1 
 
-max_trial <- 10
+max_trial <- 30
 
 #time-dependent parameters
 tau_p <- 150
@@ -33,23 +33,23 @@ lambda2 <- 0.7
 
 #time-varying functions and parameters
 
-#t <- seq(-200, T + trans) //XXX ??
-t <- seq(1, T + trans) 
-
-
-a_p <- 1/(1 + lambda1 * exp( - p_1 * (t - tau_p)^2)) # a=b
-#a[1:(trans+T)] <- 1
+t <- seq(1, T) 
+trans_vec <- c(rep(1,trans))
+a_p1 <- 1/(1 + lambda1 * exp( - p_1 * (t - tau_p)^2)) # a=b
+a_p <- c(trans_vec, a_p1)
 
 f <- 1/(1 + lambda1 * exp( - p_1 * (t - 2 * tau_p)^2))
 
 D <- lambda2 * ( (p_2^K) / factorial(K) ) * (t - (tau_p + tau_A))^K * exp(- p_2 * (t - (tau_p + tau_A))^2)
 
-a_A <- 1/(D + 1)
+a_A1 <- 1/(D + 1)
+a_A2 <- c(c(rep(1,179)), a_A1[180:T])
+a_A <- c(trans_vec, a_A2)
 
 a <- a_p
 
-thres = 1/(1 + beta * ((1 - f) + ( 1 - a_A)))
-#thres[1:5600] <- 7.3
+thres1 = 1/(1 + beta * ((1 - f) + ( 1 - a_A2)))
+thres <- c(trans_vec, thres1)
 
 plotf <- function(x, m, pot){
   # create data frames
