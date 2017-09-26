@@ -1,5 +1,5 @@
 #setwd("~/Documents/papers/MathModBook/Exercises-Chap2/R/SAWmodel")
-setwd("~/Google\ Drive/Studium/Math_VO/Abschlussaufgabe/modelling_VO/")
+#setwd("~/Google\ Drive/Studium/Math_VO/Abschlussaufgabe/modelling_VO/")
 rm(list=ls())
 
 library(ggplot2)
@@ -8,28 +8,31 @@ library (stats)
 
 sacRate <- dget("sacRate.R")
 
-T = 600
+T = 600 + 200 #post run time for plotting
 L <- 51
-trans <- 10000
-gamma <- 0.954
+pre_run_trans <- 400 #pre run time for plotting
+trans <- 10000 + pre_run_trans 
+gamma <- 0.940 #0.954 worked quite good #decrease to lower microsacade rate
 slope <- 1*L
+
+tp <- seq(-pre_run_trans+200, T) 
 
 #saccades
 sac <- matrix(, nrow = 0, ncol = 3)
 trial <- 1
 subj <- 1 
 
-max_trial <- 30
+max_trial <- 1000
 
 #time-dependent parameters
 tau_p <- 150
 tau_A <- 30
 K <- 1
 p_1 <- 0.0002
-p_2 <- 0.02
-beta <- 0.3
-lambda1 <- 0.2
-lambda2 <- 0.7
+p_2 <- 0.00008 #originally 0.2 determines the width of the parabola of spike in a_A
+beta <- 0.3 #orginally 0.3
+lambda1 <- 1.2 #originally 0.2 --> peak size of a_p
+lambda2 <- 40.5 #orginally 0.7 --> adjusted so that a_A has peak size to approx. 0.8
 
 #time-varying functions and parameters
 
@@ -129,7 +132,7 @@ for (trial in 1:max_trial)
       vi <- which(m2 == min(m2), arr.ind = TRUE) #returns vector with row & column indices of global minimum
       x[i+1,] <-vi #save position
       #save microsaccade for plotting
-      if(j >= trans+1)
+      if(j >= (trans-pre_run_trans+1))
       {
         sac <- rbind(sac, c(j-trans, subj, trial))
       }
@@ -146,6 +149,6 @@ for (trial in 1:max_trial)
 #x <- x + matrix(data=0.5*runif(2*length(x[,1])),ncol=2)
 
 plotf(x, m, pot)
-sacRate(sac, 0, T)
+sacRate(sac, -pre_run_trans, T)
 
 

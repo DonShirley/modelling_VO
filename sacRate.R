@@ -14,11 +14,11 @@ function(sac, t1, t2)
   for ( w in 1:L ) {
     tau <- t[w] - sac[,1]
     cw <- alpha^2*tau*exp(-alpha*tau)
-    idx <- which(tau>0)
+    idx <- which(cw>0)
     crate[w] <- sum(cw[idx])
   }
   # divide by number of trials
-  Ntrials <- max(sac[,3])
+  Ntrials <- max(sac[,3]) - min(sac[,3])+1
   crate <- crate/Ntrials*1000
   
   # define data frame
