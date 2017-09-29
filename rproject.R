@@ -148,7 +148,8 @@ for (trial in 1:max_trial)
 # jitter trajectory (for better visualization)
 #x <- x + matrix(data=0.5*runif(2*length(x[,1])),ncol=2)
 
+#plot time-dependent self-avoiding random walk
 plotf(x, m, pot)
-sacRate(sac, -pre_run_trans, T)
-
+#plot microsaccade rate from t=-200 to t=600
+sacRate(sac, -200, 600)
 
