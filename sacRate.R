@@ -26,6 +26,6 @@ function(sac, t1, t2)
   
   # generate plot
   b <- ggplot(causalrate.df) + geom_line(aes(x=time,y=causalrate)) + 
-    xlab("Microsaccade onset time  t[ms]") + ylab("Microsaccade rate [1/s]") 
+    xlab("Microsaccade onset time  t[ms]") + ylab("Microsaccade rate [1/s]") +  + scale_x_continuous(breaks = c(200, 300, 400)) #modify labeling on x-axis
   print(b)
 }
