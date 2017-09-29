@@ -109,3 +109,4 @@ p1 <- ggplot(data=traj.df,aes(x=x,y=y)) + #
 # print plot#
 pushViewport(viewport(layout=grid.layout(1,1)))#
 print(p1,vp=viewport(layout.pos.row=1,layout.pos.col=1))
+load("/Users/adrian/Google Drive/Studium/Math_VO/Abschlussaufgabe/modelling_VO/workspace_figure3C1.RData")
